@@ -46,6 +46,14 @@ def assert_no_forbidden_style(text: str, label: str) -> None:
             raise AssertionError(f"polite style remains in {label}: {phrase}")
 
 
+def assert_markdown_heading(text: str, heading: str, day: int) -> None:
+    lines = text.splitlines()
+    if heading not in lines:
+        raise AssertionError(f"heading must start at column 1: {heading}: day {day}")
+    if f"    {heading}" in lines:
+        raise AssertionError(f"heading is indented as code block: {heading}: day {day}")
+
+
 for day, week, slug, _title in DAYS:
     base = ROOT / "weeks" / WEEKS[week] / slug
     concept = (base / "concept.md").read_text(encoding="utf-8")
@@ -55,8 +63,7 @@ for day, week, slug, _title in DAYS:
         raise AssertionError(f"concept too short: day {day}")
 
     for section in REQUIRED_SECTIONS:
-        if section not in concept:
-            raise AssertionError(f"missing {section}: day {day}")
+        assert_markdown_heading(concept, section, day)
 
     for phrase in FORBIDDEN_OLD_SECTIONS:
         if phrase in concept:
