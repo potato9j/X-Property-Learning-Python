@@ -1,6 +1,6 @@
 name: bootstrap-course-repository
 
-# Regenerates the course repository from scripts/bootstrap_course_repository.py.
+# Regenerates the simplified textbook-style course repository.
 on:
   workflow_dispatch:
   push:
@@ -30,10 +30,8 @@ jobs:
           python scripts/validate_structure.py
           python scripts/validate_markdown_links.py
           python scripts/check_required_sections.py
-          python scripts/validate_notebooks.py
+          python scripts/execute_lessons.py
           python scripts/validate_datasets.py
-          python scripts/execute_notebooks.py
-          python weeks/week01_python_foundations/day01_colab_execution_values_and_types/lesson.py
           python -m pytest
       - name: Commit generated repository
         run: |
@@ -43,6 +41,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
-            git commit -m "Generate complete 4-week Python and LLM course repository"
+            git commit -m "Generate simplified textbook-style course repository"
             git push
           fi
