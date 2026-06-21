@@ -2,9 +2,6 @@ name: bootstrap-course-repository
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/bootstrap-course-repository.yml'
 
 permissions:
   contents: write
