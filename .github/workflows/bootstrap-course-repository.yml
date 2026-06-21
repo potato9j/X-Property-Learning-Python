@@ -21,6 +21,36 @@ jobs:
           python-version: '3.11'
       - name: Generate repository content
         run: python scripts/bootstrap_course_repository.py
+      - name: Normalize generated markdown
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def normalize_concept(text: str) -> str:
+              text = text.replace('교과서식 읽기', '체계적 읽기')
+              lines = text.splitlines()
+              normalized = []
+              in_fence = False
+              for line in lines:
+                  stripped = line.lstrip()
+                  if stripped.startswith('```'):
+                      normalized.append(stripped)
+                      in_fence = not in_fence
+                      continue
+                  if in_fence:
+                      if normalized and normalized[-1].rstrip().endswith(':') and stripped and not line.startswith((' ', '\t')):
+                          normalized.append('    ' + line)
+                      else:
+                          normalized.append(line)
+                      continue
+                  if line.startswith('    '):
+                      line = line[4:]
+                  normalized.append(line)
+              return '\n'.join(normalized).strip() + '\n'
+
+          for path in Path('weeks').rglob('concept.md'):
+              path.write_text(normalize_concept(path.read_text(encoding='utf-8')), encoding='utf-8')
+          PY
       - name: Install validation dependencies
         run: python -m pip install -r requirements-dev.txt
       - name: Validate generated content
@@ -39,6 +69,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
-            git commit -m "Regenerate course as declarative textbook"
+            git commit -m "Regenerate normalized textbook course"
             git push
           fi
