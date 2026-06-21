@@ -38,7 +38,9 @@ jobs:
                       in_fence = not in_fence
                       continue
                   if in_fence:
-                      code_line = line[4:] if line.startswith('    ') else line
+                      code_line = line
+                      while code_line.startswith('    '):
+                          code_line = code_line[4:]
                       code_stripped = code_line.lstrip()
                       if normalized and normalized[-1].rstrip().endswith(':') and code_stripped and not code_line.startswith((' ', '\t')):
                           code_line = '    ' + code_line
