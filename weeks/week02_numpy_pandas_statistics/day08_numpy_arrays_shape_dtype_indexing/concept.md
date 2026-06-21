@@ -85,15 +85,15 @@ array[row_index, column_index]
 아래 예제는 `lesson.py`와 별개로 읽는 작은 코드이다. 목적은 `NumPy 배열, shape, dtype과 indexing`의 모든 기능을 쓰는 것이 아니라, 값과 이름과 일반식의 관계를 가장 작은 형태로 다시 보는 것이다.
 
 ```python
-    chapter_title = "NumPy 배열, shape, dtype과 indexing"
-    chapter_terms = ['array', 'shape', 'dtype']
-    first_term = chapter_terms[0]
+chapter_title = "NumPy 배열, shape, dtype과 indexing"
+chapter_terms = ['array', 'shape', 'dtype']
+first_term = chapter_terms[0]
 
-    print("장 제목:", chapter_title)
-    print("첫 용어:", first_term)
+print("장 제목:", chapter_title)
+print("첫 용어:", first_term)
 
-    for index, term in enumerate(chapter_terms, start=1):
-        print(index, term)
+for index, term in enumerate(chapter_terms, start=1):
+    print(index, term)
 ```
 
 이 예제의 첫 줄은 문자열 값에 `chapter_title`이라는 이름을 붙인다. 둘째 줄은 여러 문자열을 list로 묶고 `chapter_terms`라는 이름을 붙인다. 셋째 줄은 list의 첫 번째 값을 골라 `first_term`이라는 이름을 붙인다. 마지막 `for` 일반식은 list 안의 값을 하나씩 꺼내 `term`이라는 이름으로 읽는다. `enumerate`는 순서 번호와 값을 함께 꺼내는 도구이다.
