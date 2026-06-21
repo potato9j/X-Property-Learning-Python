@@ -27,8 +27,12 @@ jobs:
           from pathlib import Path
           path = Path("scripts/bootstrap_course_repository.py")
           text = path.read_text(encoding="utf-8")
-          text = text.replace('raise AssertionError("\\\\n".join(errors[:50]))', 'raise AssertionError(chr(10).join(errors[:50]))')
-          path.write_text(text, encoding="utf-8")
+          fixed = text.replace('raise AssertionError("\\n".join(errors[:50]))', 'raise AssertionError(chr(10).join(errors[:50]))')
+          fixed = fixed.replace('raise AssertionError("\\\\n".join(errors[:50]))', 'raise AssertionError(chr(10).join(errors[:50]))')
+          if fixed == text:
+              matches = [line for line in text.splitlines() if 'raise AssertionError' in line and 'errors[:50]' in line]
+              raise SystemExit(f"generator repair did not match target line: {matches}")
+          path.write_text(fixed, encoding="utf-8")
           PY
       - name: Generate repository content
         run: python scripts/bootstrap_course_repository.py
