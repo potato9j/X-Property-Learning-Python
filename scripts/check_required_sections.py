@@ -39,6 +39,15 @@ LESSON_MARKERS = [
     "# 9. 읽기 과제",
 ]
 
+OVER_INDENTED_SYNTAX = [
+    "```python\n    if ",
+    "```python\n    for ",
+    "```python\n    def ",
+    "```python\n    class ",
+    "```python\n    try:",
+    "```python\n    with ",
+]
+
 
 def assert_no_forbidden_style(text: str, label: str) -> None:
     for phrase in FORBIDDEN_POLITE_STYLE:
@@ -73,6 +82,9 @@ for day, week, slug, _title in DAYS:
         raise AssertionError(f"concept should explain syntax as a general form: day {day}")
     if "```python" not in concept:
         raise AssertionError(f"concept should include a Python syntax example: day {day}")
+    for marker in OVER_INDENTED_SYNTAX:
+        if marker in concept:
+            raise AssertionError(f"syntax example starts over-indented: {marker!r}: day {day}")
 
     assert_no_forbidden_style(concept, f"concept day {day}")
     assert_no_forbidden_style(lesson, f"lesson day {day}")
