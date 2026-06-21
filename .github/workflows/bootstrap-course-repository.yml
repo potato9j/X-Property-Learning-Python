@@ -1,11 +1,7 @@
 name: bootstrap-course-repository
 
-# One-time regeneration workflow. It restores itself to manual-only before committing.
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - .github/workflows/bootstrap-course-repository.yml
 
 permissions:
   contents: write
@@ -15,16 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install current generators
+      - name: Generate repository content
+        run: python scripts/bootstrap_course_repository.py
+      - name: Enrich day lesson files
+        run: python scripts/enrich_lessons.py
+      - name: Install validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Validate generated content
         run: |
-          python - <<'PY'
-          import base64
-          import gzip
-          from pathlib import Path
-          files = {
-              "scripts/bootstrap_course_repository.py": "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
+          python scripts/validate_structure.py
+          python scripts/validate_markdown_links.py
+          python scripts/check_required_sections.py
+          python scripts/execute_lessons.py
+          python scripts/validate_datasets.py
+          python -m pytest
