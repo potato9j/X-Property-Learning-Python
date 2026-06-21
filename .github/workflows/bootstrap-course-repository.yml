@@ -1,0 +1,46 @@
+name: bootstrap-course-repository
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/bootstrap_course_repository.py
+      - .github/workflows/bootstrap-course-repository.yml
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate repository content
+        run: python scripts/bootstrap_course_repository.py
+      - name: Install validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Validate generated content
+        run: |
+          python scripts/validate_structure.py
+          python scripts/validate_markdown_links.py
+          python scripts/check_required_sections.py
+          python scripts/validate_notebooks.py
+          python scripts/validate_datasets.py
+          python scripts/execute_notebooks.py
+          python -m pytest
+      - name: Commit generated repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+          else
+            git commit -m "Generate complete 4-week Python and LLM course repository"
+            git push
+          fi
