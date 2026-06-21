@@ -2,6 +2,9 @@ name: bootstrap-course-repository
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/bootstrap-course-repository.yml'
 
 permissions:
   contents: write
@@ -28,7 +31,7 @@ jobs:
                   line = line[4:]
               return line
 
-          def normalize_concept(text: str) -> str:
+          def normalize_markdown(text: str) -> str:
               text = text.replace('교과서식 읽기', '체계적 읽기')
               lines = text.splitlines()
               normalized = []
@@ -49,8 +52,9 @@ jobs:
                   normalized.append(strip_repeated_indent(line))
               return '\n'.join(normalized).strip() + '\n'
 
-          for path in Path('weeks').rglob('concept.md'):
-              path.write_text(normalize_concept(path.read_text(encoding='utf-8')), encoding='utf-8')
+          targets = list(Path('weeks').rglob('concept.md')) + [Path('README.md'), Path('TEACHING_GUIDE.md')]
+          for path in targets:
+              path.write_text(normalize_markdown(path.read_text(encoding='utf-8')), encoding='utf-8')
           PY
       - name: Install validation dependencies
         run: python -m pip install -r requirements-dev.txt
