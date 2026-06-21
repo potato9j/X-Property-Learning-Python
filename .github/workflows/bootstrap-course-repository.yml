@@ -26,6 +26,11 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
+          def strip_repeated_indent(line: str) -> str:
+              while line.startswith('    '):
+                  line = line[4:]
+              return line
+
           def normalize_concept(text: str) -> str:
               text = text.replace('교과서식 읽기', '체계적 읽기')
               lines = text.splitlines()
@@ -38,17 +43,13 @@ jobs:
                       in_fence = not in_fence
                       continue
                   if in_fence:
-                      code_line = line
-                      while code_line.startswith('    '):
-                          code_line = code_line[4:]
+                      code_line = strip_repeated_indent(line)
                       code_stripped = code_line.lstrip()
                       if normalized and normalized[-1].rstrip().endswith(':') and code_stripped and not code_line.startswith((' ', '\t')):
                           code_line = '    ' + code_line
                       normalized.append(code_line)
                       continue
-                  if line.startswith('    '):
-                      line = line[4:]
-                  normalized.append(line)
+                  normalized.append(strip_repeated_indent(line))
               return '\n'.join(normalized).strip() + '\n'
 
           for path in Path('weeks').rglob('concept.md'):
