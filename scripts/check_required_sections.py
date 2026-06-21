@@ -55,20 +55,20 @@ def assert_no_forbidden_style(text: str, label: str) -> None:
             raise AssertionError(f"polite style remains in {label}: {phrase}")
 
 
-def assert_markdown_heading(text: str, heading: str, day: int) -> None:
+def assert_markdown_heading(text: str, heading: str, label: str) -> None:
     lines = text.splitlines()
     if heading not in lines:
-        raise AssertionError(f"heading must start at column 1: {heading}: day {day}")
+        raise AssertionError(f"heading must start at column 1: {heading}: {label}")
 
 
-def assert_no_indented_headings(text: str, day: int) -> None:
+def assert_no_indented_headings(text: str, label: str) -> None:
     in_fence = False
     for line_no, line in enumerate(text.splitlines(), start=1):
         if line.lstrip().startswith("```"):
             in_fence = not in_fence
             continue
         if not in_fence and line.startswith("    #"):
-            raise AssertionError(f"markdown heading is indented as code block: day {day}, line {line_no}")
+            raise AssertionError(f"markdown heading is indented as code block: {label}, line {line_no}")
 
 
 for day, week, slug, _title in DAYS:
@@ -80,8 +80,8 @@ for day, week, slug, _title in DAYS:
         raise AssertionError(f"concept too short: day {day}")
 
     for section in REQUIRED_SECTIONS:
-        assert_markdown_heading(concept, section, day)
-    assert_no_indented_headings(concept, day)
+        assert_markdown_heading(concept, section, f"day {day}")
+    assert_no_indented_headings(concept, f"day {day}")
 
     for phrase in FORBIDDEN_OLD_SECTIONS:
         if phrase in concept:
@@ -101,5 +101,10 @@ for day, week, slug, _title in DAYS:
     for marker in LESSON_MARKERS:
         if marker not in lesson:
             raise AssertionError(f"missing lesson marker {marker}: day {day}")
+
+for root_doc in [ROOT / "README.md", ROOT / "TEACHING_GUIDE.md"]:
+    text = root_doc.read_text(encoding="utf-8")
+    assert_no_indented_headings(text, root_doc.name)
+    assert_no_forbidden_style(text, root_doc.name)
 
 print("check_required_sections: OK")
