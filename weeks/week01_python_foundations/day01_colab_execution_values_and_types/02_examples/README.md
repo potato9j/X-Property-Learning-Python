@@ -1,28 +1,12 @@
-# Day 01 예제. Colab 실행, 값, 표현식과 타입
+# Day 01 Examples
 
 ## 예제 목표
-Colab, 표현식, 변수, int, float, str, bool, None를 코드 실행 결과와 함께 확인합니다.
+
+`Colab 실행, 값, 표현식과 타입`를 작은 합성 데이터로 확인합니다. 예제는 정답을 외우기 위한 코드가 아니라, 각 줄이 어떤 값을 만드는지 관찰하기 위한 자료입니다.
 
 ## 실행 순서
-1. notebook을 엽니다.
-2. 출력과 shape를 예측합니다.
-3. 실행 후 차이를 기록합니다.
 
-## 핵심 예제 코드
-```python
-day = 1
-topic = "Colab 실행, 값, 표현식과 타입"
-scores = [72, 85, 91, 68, 77]
-passed = []
-for score in scores:
-    if score >= 75:
-        passed.append(score)
-summary = {"day": day, "topic": topic, "student_count": len(scores), "passed_count": len(passed), "average": sum(scores) / len(scores)}
-print(summary)
-print(type(summary["average"]).__name__)
-```
-
-## 확인 질문
-- 첫 출력의 자료구조는 무엇인가요?
-- shape-like 값은 무엇을 뜻하나요?
-- AI 설명에서 검증해야 할 부분은 무엇인가요?
+1. `day01_examples.ipynb`를 엽니다.
+2. 첫 셀의 데이터 구조를 읽습니다.
+3. 출력 dictionary에서 평균과 개수를 확인합니다.
+4. 값을 하나 바꾸고 출력이 어떻게 달라지는지 비교합니다.

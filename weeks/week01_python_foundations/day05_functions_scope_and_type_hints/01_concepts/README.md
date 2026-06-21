@@ -1,50 +1,38 @@
 # Day 05. 함수, scope와 type hint
 
 ## 1. 오늘의 위치
-Week 1의 학습 주제입니다. 이전 개념을 다시 사용하고 이후 데이터, tensor, LLM 흐름으로 연결합니다.
+
+오늘은 `함수, scope와 type hint`를 다룹니다. 이 주제는 Python 핵심 기초 완전 입문 흐름 안에서 다음 단계의 코드를 읽기 위한 기반입니다.
 
 ## 2. 학습 목표
-- 함수을 한 문장으로 설명한다.
-- 코드 실행 전 출력과 shape를 예측한다.
-- 오류 메시지를 읽고 최소 수정안을 제시한다.
-- AI가 만든 설명을 실행 결과로 검증한다.
 
-## 3. 선수지식 자가점검
-1. 이전 날짜에서 배운 변수와 타입을 떠올립니다.
-2. 코드가 위에서 아래로 실행된다는 점을 설명합니다.
-3. 실제 개인정보를 사용하지 않는 이유를 말합니다.
+- 오늘 주제의 핵심 용어를 자신의 말로 설명합니다.
+- 합성 의료 데이터 예제에서 입력, 처리, 출력을 구분합니다.
+- 코드가 실패할 때 타입, 길이, 이름, 실행 순서를 기준으로 원인을 좁힙니다.
+
+## 3. 선수지식 점검
+
+수업 전에 변수, 리스트, 표 형태 데이터, 평균 계산 중 하나라도 낯설면 예제 노트북의 첫 셀부터 천천히 실행합니다.
 
 ## 4. 핵심 개념
-| 용어 | 설명 |
-| --- | --- |
-| 함수 | 오늘 코드에서 확인할 핵심 개념입니다. |
-| parameter | 오늘 코드에서 확인할 핵심 개념입니다. |
-| argument | 오늘 코드에서 확인할 핵심 개념입니다. |
-| return | 오늘 코드에서 확인할 핵심 개념입니다. |
-| local scope | 오늘 코드에서 확인할 핵심 개념입니다. |
-| global scope | 오늘 코드에서 확인할 핵심 개념입니다. |
 
-## 5. 예측하고 실행하기
-```python
-day = 5
-topic = "함수, scope와 type hint"
-scores = [72, 85, 91, 68, 77]
-passed = []
-for score in scores:
-    if score >= 75:
-        passed.append(score)
-summary = {"day": day, "topic": topic, "student_count": len(scores), "passed_count": len(passed), "average": sum(scores) / len(scores)}
-print(summary)
-print(type(summary["average"]).__name__)
-```
+핵심은 코드를 외우는 것이 아니라 값의 흐름을 추적하는 것입니다. 입력 데이터가 어떤 형태로 들어오고, 어떤 기준으로 걸러지며, 어떤 숫자나 문장으로 요약되는지 확인합니다.
 
-## 6. 흔한 오해
-- 출력만 보고 타입과 shape를 확인하지 않는 실수를 피합니다.
-- 합성 데이터는 실제 환자 정보가 아닙니다.
+## 5. 의료 데이터 맥락
 
-## 7. 참고자료
-- Python 공식 문서: https://docs.python.org/3/
-- NumPy 공식 문서: https://numpy.org/doc/
-- pandas 공식 문서: https://pandas.pydata.org/docs/
-- PyTorch 공식 문서: https://pytorch.org/docs/stable/index.html
-- Hugging Face 문서: https://huggingface.co/docs/transformers/index
+실습 데이터는 모두 합성입니다. `patient_id`는 실제 환자가 아니라 행을 연결하기 위한 가짜 식별자입니다. 수업에서는 민감정보를 코드나 프롬프트에 넣지 않습니다.
+
+## 6. 코드 읽기 순서
+
+1. 데이터가 어디에서 만들어지는지 봅니다.
+2. 각 변수의 타입과 길이를 확인합니다.
+3. 조건문과 반복문이 어떤 행을 선택하는지 봅니다.
+4. 출력값이 학습 목표와 맞는지 설명합니다.
+
+## 7. 흔한 오류
+
+셀 실행 순서를 건너뛰면 이름이 정의되지 않습니다. 숫자와 문자열을 섞으면 비교나 계산이 실패합니다. 리스트 길이가 다르면 표로 묶을 때 행이 어긋납니다.
+
+## 8. 다음 학습과 연결
+
+오늘의 작은 데이터 흐름 읽기는 pandas 표 처리, PyTorch tensor, Transformer attention까지 같은 방식으로 확장됩니다.

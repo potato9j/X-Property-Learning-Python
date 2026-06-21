@@ -1,3 +1,3 @@
-# LEARNING_OUTCOMES
+# Learning Outcomes
 
-학습자는 코드 실행, shape 해석, 통계 결과 설명, PyTorch 학습 루프 읽기, LLM 입력과 출력 검증을 수행합니다.
+수료자는 Python 코드의 실행 순서를 읽고, 합성 표 데이터를 정리하며, 간단한 학습 루프를 설명하고, LLM 출력의 한계와 개인정보 위험을 구분할 수 있어야 합니다.

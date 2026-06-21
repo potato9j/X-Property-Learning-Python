@@ -1,3 +1,3 @@
-# CURRICULUM_MAP
+# Curriculum Map
 
-Week 01의 실행 흐름은 Week 02의 데이터 처리, Week 03의 tensor, Week 04의 token 흐름으로 확장됩니다.
+Python 기초는 데이터 분석의 문법 기반입니다. NumPy와 pandas는 표와 배열을 다루는 기술입니다. PyTorch는 tensor와 gradient를 통해 모델 학습 과정을 설명합니다. LLM 파트는 token, embedding, attention을 앞선 tensor 사고와 연결합니다.
