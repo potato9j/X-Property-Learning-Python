@@ -23,6 +23,66 @@ jobs:
         run: python scripts/bootstrap_course_repository.py
       - name: Enrich day lesson files
         run: python scripts/enrich_lessons.py
+      - name: Enforce declarative textbook style
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path('.')
+          paths = list((root / 'weeks').rglob('concept.md')) + list((root / 'weeks').rglob('lesson.py'))
+          paths += [root / 'README.md', root / 'TEACHING_GUIDE.md']
+
+          replacements = [
+              ('교과서식 개념 설명', '개념 설명'),
+              ('핵심 용어', '읽을 용어'),
+              ('오늘의 중심 생각', '이 장의 중심 생각'),
+              ('답해 보세요', '답한다'),
+              ('설명해 보세요', '설명한다'),
+              ('예측하세요', '예측한다'),
+              ('확인하세요', '확인한다'),
+              ('보세요', '본다'),
+              ('해주세요', '한다'),
+              ('합니다', '한다'),
+              ('입니다', '이다'),
+              ('됩니다', '된다'),
+              ('하세요', '하라'),
+              ('인가요?', '인가?'),
+              ('나요?', '는가?'),
+          ]
+
+          for path in paths:
+              text = path.read_text(encoding='utf-8')
+              for old, new in replacements:
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+
+          forbidden = ['합니다', '입니다', '됩니다', '하세요', '인가요?', '나요?']
+          errors = []
+          for path in paths:
+              text = path.read_text(encoding='utf-8')
+              for phrase in forbidden:
+                  if phrase in text:
+                      errors.append(f'{path}: {phrase}')
+          old_headings = ['오늘의 위치', '왜 이 개념을 먼저 배우는가', '교과서식 설명', '코드해석 질문', '코드 해석 질문', '수업중활동', '수업 중 활동', '오늘의 정리']
+          for path in root.joinpath('weeks').rglob('concept.md'):
+              text = path.read_text(encoding='utf-8')
+              for phrase in old_headings:
+                  if phrase in text:
+                      errors.append(f'{path}: old heading {phrase}')
+              required = [
+                  '## 1. 이 장에서 배우는 내용이 무엇인지',
+                  '## 2. 전체개념',
+                  '## 3. 전체 구조',
+                  '## 4. 전체용어',
+                  '## 5. 설명',
+                  '## 6. py파일과 별개로 예제',
+              ]
+              for section in required:
+                  if section not in text:
+                      errors.append(f'{path}: missing {section}')
+          if errors:
+              raise SystemExit('\n'.join(errors[:100]))
+          PY
       - name: Install validation dependencies
         run: python -m pip install -r requirements-dev.txt
       - name: Validate generated content
@@ -41,6 +101,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
-            git commit -m "Generate simplified textbook-style course repository"
+            git commit -m "Generate declarative textbook-style course repository"
             git push
           fi
