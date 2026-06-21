@@ -501,7 +501,7 @@ for md in ROOT.rglob("*.md"):
             errors.append(f"{md.relative_to(ROOT)} -> {target}")
 
 if errors:
-    raise AssertionError("\n".join(errors[:50]))
+    raise AssertionError(chr(10).join(errors[:50]))
 print("validate_markdown_links: OK")
 """,
     )

@@ -1,14 +1,14 @@
 """
-Day 01. Colab 실행, 값, 표현식과 타입
+Day 12. 시각화와 탐색적 데이터 분석
 
 이 파일은 학생이 코드를 처음부터 직접 작성하기 위한 파일이 아닙니다.
 이미 작성된 코드를 읽고, 주석을 따라가며, 값의 흐름을 해석하기 위한 파일입니다.
 
 오늘의 중심 생각:
-Python 코드는 값을 만들고 이름을 붙이며 위에서 아래로 실행된다.
+시각화는 정답을 증명하기보다 데이터의 분포와 이상한 지점을 찾는 도구다.
 
 핵심 용어:
-value, expression, variable, type, execution order
+EDA, distribution, histogram, scatter, outlier
 """
 
 
@@ -25,8 +25,8 @@ records = [
 
 # 2. 먼저 전체 데이터의 크기와 타입을 확인합니다.
 #    초보자는 계산보다 먼저 "무엇을 들고 있는지" 확인해야 합니다.
-print("DAY:", 1)
-print("TOPIC:", "Colab 실행, 값, 표현식과 타입")
+print("DAY:", 12)
+print("TOPIC:", "시각화와 탐색적 데이터 분석")
 print("records type:", type(records).__name__)
 print("row count:", len(records))
 print("first row type:", type(records[0]).__name__)
@@ -74,8 +74,8 @@ for row in records:
 # 8. 수업용 최종 요약입니다.
 #    이 dict를 보고 어떤 계산이 있었는지 거꾸로 설명하는 것이 오늘의 과제입니다.
 summary = {
-    "topic": "Colab 실행, 값, 표현식과 타입",
-    "core_idea": "Python 코드는 값을 만들고 이름을 붙이며 위에서 아래로 실행된다.",
+    "topic": "시각화와 탐색적 데이터 분석",
+    "core_idea": "시각화는 정답을 증명하기보다 데이터의 분포와 이상한 지점을 찾는 도구다.",
     "patient_count": len(records),
     "mean_glucose": round(mean_glucose, 2),
     "high_glucose_count": sum(row["glucose"] >= threshold for row in records),
