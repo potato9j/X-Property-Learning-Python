@@ -1,5 +1,6 @@
 name: bootstrap-course-repository
 
+# This workflow bootstraps the complete generated course repository.
 on:
   workflow_dispatch:
   push:
