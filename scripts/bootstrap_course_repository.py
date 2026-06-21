@@ -143,7 +143,7 @@ print(summary)
 
 def root_docs() -> None:
     rows = "\n".join(
-        f"| Week {week} | Day {day:02d} | [{title}](weeks/{WEEKS[week][0]}/day{day:02d}_{slug}/01_concepts/README.md) |"
+        f"| Week {week} | Day {day:02d} | [{title}](weeks/{WEEKS[week][0]}/day{day:02d}_{slug}/{'concept.md' if day == 1 else '01_concepts/README.md'}) |"
         for day, week, slug, title in DAYS
     )
     write(
@@ -155,9 +155,10 @@ def root_docs() -> None:
 
 ## 과정 운영 원칙
 
-- 학생용 노트북과 해설 노트북을 분리해 수업 전 자기 점검과 수업 후 복습이 모두 가능하게 합니다.
-- 매일 개념 설명, 실행 예제, 실습 문제, 퀴즈, 해설을 같은 구조로 제공합니다.
-- 코드는 Colab 기준으로 실행되며, 로컬 검증 스크립트는 문서 구조와 노트북 실행 가능성을 확인합니다.
+- Colab은 실행 도구로만 사용하고, 학습의 중심은 Python 코드 읽기와 해석에 둡니다.
+- Day 1은 `concept.md`와 `lesson.py` 두 파일만 사용해 학생이 읽을 파일과 실행할 파일을 명확히 구분합니다.
+- 이후 일차도 개념 설명, 실행 예제, 실습 문제, 퀴즈, 해설을 학생이 따라갈 수 있는 순서로 제공합니다.
+- 로컬 검증 스크립트는 문서 구조, 링크, 노트북 또는 Python 파일의 실행 가능성을 확인합니다.
 - 생성형 AI는 학습 보조 도구로만 다루며, 개인정보 입력과 검증 없는 임상 판단을 금지합니다.
 
 ## 28일 학습 경로
@@ -200,9 +201,222 @@ python -m pytest
     write(ROOT / "pyproject.toml", '[tool.pytest.ini_options]\ntestpaths = ["tests"]\npython_files = ["test_*.py"]\n')
 
 
+def day1_concept() -> str:
+    return """
+# Day 01. Colab 실행, 값, 표현식과 타입
+
+## 1. 오늘 수업의 목적
+
+첫날의 목표는 Python 문법을 많이 외우는 것이 아닙니다. 학생이 코드 한 줄을 보았을 때 "이 줄은 어떤 값을 만들고, 그 값은 어디로 이동하며, 마지막 출력은 무엇을 뜻하는가"를 설명할 수 있게 만드는 것입니다. 의학 데이터 분석, PyTorch, LLM 코드도 결국 값이 만들어지고 전달되고 변환되는 과정입니다. 그래서 Day 1에서는 가장 작은 단위인 값, 표현식, 변수, 타입, 실행 순서를 정확히 잡습니다.
+
+Colab은 여기서 특별한 프로그래밍 언어가 아닙니다. 브라우저에서 Python을 실행하게 해 주는 도구입니다. 학생은 노트북 파일 형식 자체를 깊게 배울 필요가 없습니다. 대신 Colab에서 `lesson.py`를 실행하고, 출력이 왜 그렇게 나오는지 읽는 연습을 합니다.
+
+## 2. 학생이 반드시 알아야 할 Colab 사용법
+
+Colab에서 알아야 할 것은 많지 않습니다. 첫째, 코드 셀은 Python 코드를 실행합니다. 둘째, 위에서 아래로 실행해야 앞에서 만든 변수를 뒤에서 사용할 수 있습니다. 셋째, 런타임을 다시 시작하면 이전에 만들었던 변수는 사라집니다. 넷째, `.py` 파일도 Colab에서 실행할 수 있습니다.
+
+예를 들어 Day 1 폴더에 있는 `lesson.py`는 Colab 코드 셀에서 다음처럼 실행할 수 있습니다.
+
+```python
+%run lesson.py
+```
+
+또는 셸 명령 방식으로 다음처럼 실행할 수 있습니다.
+
+```python
+!python lesson.py
+```
+
+두 방식 모두 Python 파일을 실행한다는 점은 같습니다. 이 수업에서는 Colab을 "코드를 돌려 보는 공간"으로만 사용하고, 실제 학습은 `.py` 코드의 흐름을 읽는 데 집중합니다.
+
+## 3. 값이란 무엇인가
+
+값은 Python이 계산해서 실제로 들고 있는 데이터입니다. 예를 들어 `3`, `3.14`, `"glucose"`, `True`는 모두 값입니다. 학생이 처음 헷갈리는 지점은 코드에 보이는 글자와 실행 후 Python이 들고 있는 값을 구분하지 못하는 데서 생깁니다.
+
+```python
+3 + 4
+```
+
+이 코드는 글자로는 `3 + 4`이지만, 실행 결과로는 `7`이라는 값을 만듭니다. Python은 코드를 읽고 계산한 뒤 값을 만듭니다. 앞으로 모든 데이터 분석 코드는 이 원리를 반복합니다. 입력값을 받고, 계산하고, 새로운 값을 만들고, 그 값을 변수나 자료구조에 저장합니다.
+
+## 4. 표현식이란 무엇인가
+
+표현식은 실행하면 하나의 값이 되는 코드 조각입니다. 아래 예시는 모두 표현식입니다.
+
+```python
+10
+10 + 5
+"patient" + "_001"
+80 >= 70
+```
+
+각 표현식은 값으로 바뀝니다. `10 + 5`는 `15`가 되고, `"patient" + "_001"`은 `"patient_001"`이 되며, `80 >= 70`은 `True`가 됩니다. 코드 읽기 수업에서 중요한 질문은 "이 표현식은 어떤 값으로 바뀌는가"입니다.
+
+## 5. 변수는 값을 담는 이름이다
+
+변수는 상자가 아니라 이름표에 가깝습니다. `glucose = 96`이라고 쓰면 Python은 `96`이라는 값을 만들고, 그 값에 `glucose`라는 이름을 붙입니다. 이후 코드에서 `glucose`라고 쓰면 Python은 그 이름이 가리키는 값을 가져옵니다.
+
+```python
+glucose = 96
+threshold = 100
+is_high = glucose >= threshold
+```
+
+이 세 줄을 해석하면 다음과 같습니다. 첫째 줄은 `96`에 `glucose`라는 이름을 붙입니다. 둘째 줄은 `100`에 `threshold`라는 이름을 붙입니다. 셋째 줄은 `glucose >= threshold`를 계산해 `False`라는 값을 만들고, 그 값에 `is_high`라는 이름을 붙입니다.
+
+학생은 코드를 직접 많이 쓰기 전에 이 해석을 말로 할 수 있어야 합니다.
+
+## 6. 타입은 값의 종류다
+
+타입은 값이 어떤 종류인지 알려줍니다. Python은 값의 타입에 따라 할 수 있는 연산을 다르게 판단합니다.
+
+| 타입 | 예시 | 의미 |
+| --- | --- | --- |
+| `int` | `21` | 정수 |
+| `float` | `36.5` | 소수점이 있는 수 |
+| `str` | `"P001"` | 문자열 |
+| `bool` | `True` | 참 또는 거짓 |
+| `list` | `[91, 107, 86]` | 여러 값을 순서대로 담는 묶음 |
+| `dict` | `{"patient_id": "P001"}` | 이름과 값을 짝지은 묶음 |
+
+예를 들어 `91 + 10`은 숫자 덧셈이지만, `"91" + "10"`은 문자열 연결입니다. 둘 다 `+` 기호를 쓰지만 타입이 달라 결과가 다릅니다. 그래서 코드 해석에서 타입 확인은 선택 사항이 아닙니다.
+
+## 7. 실행 순서가 중요한 이유
+
+Python은 기본적으로 위에서 아래로 실행됩니다. 아래 코드는 정상입니다.
+
+```python
+score = 85
+passed = score >= 70
+```
+
+하지만 아래 코드는 실패합니다.
+
+```python
+passed = score >= 70
+score = 85
+```
+
+첫 줄을 실행하는 시점에는 아직 `score`라는 이름이 만들어지지 않았기 때문입니다. Colab에서 셀을 뒤섞어 실행할 때도 같은 문제가 생깁니다. 그래서 학생은 오류가 나면 먼저 "이 변수를 만드는 줄이 먼저 실행되었는가"를 확인해야 합니다.
+
+## 8. 의료 데이터 예제를 읽는 방법
+
+Day 1의 `lesson.py`는 실제 환자 데이터가 아니라 합성 데이터 네 건을 사용합니다. 목표는 분석 결과를 내는 것이 아니라 코드 읽는 순서를 익히는 것입니다. 다음 질문을 순서대로 던지면 됩니다.
+
+1. `records`에는 몇 개의 행이 있는가?
+2. 각 행은 어떤 타입인가?
+3. `glucose_values`는 어디에서 만들어지는가?
+4. `mean_glucose`는 어떤 값들을 사용해 계산되는가?
+5. `is_high`는 숫자인가, 문자열인가, 참/거짓인가?
+6. 마지막 출력은 어떤 의도로 만들어졌는가?
+
+이 질문에 답할 수 있으면 학생은 이미 코드의 큰 흐름을 읽고 있는 것입니다.
+
+## 9. 오늘의 핵심 문장
+
+Python 코드는 위에서 아래로 실행되며, 각 줄은 값을 만들거나 이름을 붙이거나 기존 값을 이용해 새 값을 만듭니다. 코드 해석은 "값", "타입", "이름", "실행 순서"를 차례로 확인하는 작업입니다.
+
+## 10. 수업 진행 방식
+
+강사는 학생에게 처음부터 코드를 새로 짜게 하지 않습니다. 먼저 `lesson.py`를 열고 주석을 읽게 합니다. 그 다음 각 줄이 만드는 값을 예측하게 합니다. 마지막으로 Colab에서 파일을 실행해 예측과 출력이 맞는지 확인합니다. 학생이 수정해야 하는 부분은 마지막 10분에 기준값 하나를 바꿔 보는 정도로 제한합니다.
+"""
+
+
+def day1_code() -> str:
+    return '''
+"""
+Day 01 lesson.py
+
+이 파일은 "코드를 직접 많이 작성하는" 자료가 아니라
+"이미 작성된 Python 코드를 읽고 해석하는" 자료입니다.
+
+Colab에서는 같은 폴더에 이 파일을 둔 뒤 다음 중 하나로 실행합니다.
+
+%run lesson.py
+!python lesson.py
+"""
+
+
+# 1. records는 네 명의 가상 환자 행을 담은 list입니다.
+#    실제 환자 정보가 아니라 수업용 합성 데이터입니다.
+#    바깥쪽 []는 "여러 행을 순서대로 담는다"는 뜻입니다.
+records = [
+    {"patient_id": "P001", "age": 19, "glucose": 91, "group": "A"},
+    {"patient_id": "P002", "age": 21, "glucose": 107, "group": "B"},
+    {"patient_id": "P003", "age": 22, "glucose": 86, "group": "A"},
+    {"patient_id": "P004", "age": 20, "glucose": 118, "group": "B"},
+]
+
+
+# 2. type은 값의 종류를 확인하는 함수입니다.
+#    records 자체는 list이고, records 안의 첫 번째 행은 dict입니다.
+print("records의 타입:", type(records).__name__)
+print("첫 번째 행의 타입:", type(records[0]).__name__)
+print("전체 행 개수:", len(records))
+
+
+# 3. 아래 코드는 각 행에서 glucose 값만 꺼내 새 list를 만듭니다.
+#    for row in records는 records 안의 dict를 하나씩 row라는 이름으로 꺼냅니다.
+#    row["glucose"]는 한 행에서 glucose 열에 해당하는 값을 꺼냅니다.
+glucose_values = [row["glucose"] for row in records]
+
+print("glucose 값 목록:", glucose_values)
+print("glucose_values의 타입:", type(glucose_values).__name__)
+
+
+# 4. 평균은 "합계 / 개수"입니다.
+#    sum(glucose_values)는 glucose 값들의 합계를 계산합니다.
+#    len(glucose_values)는 glucose 값이 몇 개인지 계산합니다.
+mean_glucose = sum(glucose_values) / len(glucose_values)
+
+print("glucose 평균:", mean_glucose)
+print("mean_glucose의 타입:", type(mean_glucose).__name__)
+
+
+# 5. threshold는 기준값입니다.
+#    기준값을 변수로 빼 두면, 나중에 100을 95나 110으로 바꿔 비교하기 쉽습니다.
+threshold = 100
+
+
+# 6. 각 환자의 glucose가 기준 이상인지 해석합니다.
+#    row["glucose"] >= threshold는 True 또는 False를 만듭니다.
+#    즉 is_high의 타입은 bool입니다.
+for row in records:
+    patient_id = row["patient_id"]
+    glucose = row["glucose"]
+    is_high = glucose >= threshold
+
+    print(patient_id, "glucose:", glucose, "기준 이상인가?", is_high)
+
+
+# 7. 마지막 summary는 수업에서 말로 설명할 최종 요약입니다.
+#    dictionary는 이름과 값을 짝으로 묶어서 결과를 정리할 때 유용합니다.
+summary = {
+    "patient_count": len(records),
+    "threshold": threshold,
+    "mean_glucose": round(mean_glucose, 2),
+    "high_count": sum(row["glucose"] >= threshold for row in records),
+}
+
+print("요약:", summary)
+
+
+# 8. 읽기 과제:
+#    아래 네 질문에 답할 수 있으면 Day 1 목표를 달성한 것입니다.
+#    - records는 어떤 타입인가?
+#    - records[0]은 어떤 타입인가?
+#    - glucose_values는 어떤 과정을 거쳐 만들어졌는가?
+#    - high_count는 어떤 기준으로 계산되었는가?
+'''
+
+
 def day_docs() -> None:
     for day, week, slug, title in DAYS:
         base = ROOT / "weeks" / WEEKS[week][0] / f"day{day:02d}_{slug}"
+        if day == 1:
+            write(base / "concept.md", day1_concept())
+            write(base / "lesson.py", day1_code())
+            continue
         write(base / "01_concepts" / "README.md", f"""# Day {day:02d}. {title}
 
 ## 1. 오늘의 위치
@@ -344,16 +558,104 @@ def supporting_materials() -> None:
 
 def validation_scripts() -> None:
     write(ROOT / "scripts" / "course_config.py", "WEEKS = " + repr({k: v[0] for k, v in WEEKS.items()}) + "\nDAYS = " + repr([(day, week, f"day{day:02d}_{slug}") for day, week, slug, _ in DAYS]) + "\n")
-    write(ROOT / "scripts" / "validate_structure.py", 'from pathlib import Path\nfrom course_config import DAYS, WEEKS\nROOT = Path(__file__).resolve().parents[1]\nrequired = ["01_concepts/README.md", "02_examples/README.md", "03_practice/README.md", "04_quiz/README.md", "answers/practice_answers.md", "answers/quiz_answers.md"]\nfor day, week, slug in DAYS:\n    base = ROOT / "weeks" / WEEKS[week] / slug\n    for rel in required:\n        if not (base / rel).exists():\n            raise AssertionError(f"missing {base / rel}")\nnotebooks = list((ROOT / "weeks").rglob("*.ipynb"))\nif len(notebooks) != 84:\n    raise AssertionError(f"expected 84 notebooks, found {len(notebooks)}")\nprint("validate_structure: OK")\n')
+    write(ROOT / "scripts" / "validate_structure.py", '''
+from pathlib import Path
+from course_config import DAYS, WEEKS
+
+ROOT = Path(__file__).resolve().parents[1]
+standard_required = [
+    "01_concepts/README.md",
+    "02_examples/README.md",
+    "03_practice/README.md",
+    "04_quiz/README.md",
+    "answers/practice_answers.md",
+    "answers/quiz_answers.md",
+]
+
+for day, week, slug in DAYS:
+    base = ROOT / "weeks" / WEEKS[week] / slug
+    required = ["concept.md", "lesson.py"] if day == 1 else standard_required
+    for rel in required:
+        if not (base / rel).exists():
+            raise AssertionError(f"missing {base / rel}")
+
+day1 = ROOT / "weeks" / WEEKS[1] / DAYS[0][2]
+old_day1_dirs = ["01_concepts", "02_examples", "03_practice", "04_quiz", "answers"]
+for name in old_day1_dirs:
+    if (day1 / name).exists():
+        raise AssertionError(f"Day 1 should not keep split subfolder: {day1 / name}")
+
+notebooks = list((ROOT / "weeks").rglob("*.ipynb"))
+if len(notebooks) != 81:
+    raise AssertionError(f"expected 81 notebooks after Day 1 py conversion, found {len(notebooks)}")
+print("validate_structure: OK")
+''')
     write(ROOT / "scripts" / "validate_markdown_links.py", 'import re\nfrom pathlib import Path\nROOT = Path(__file__).resolve().parents[1]\nlink_re = re.compile(r"\\[[^\\]]+\\]\\(([^)]+)\\)")\nerrors = []\nfor md in ROOT.rglob("*.md"):\n    text = md.read_text(encoding="utf-8")\n    for target in link_re.findall(text):\n        if target.startswith(("http://", "https://", "mailto:", "#")):\n            continue\n        clean = target.split("#", 1)[0]\n        if clean and not (md.parent / clean).exists():\n            errors.append(f"{md.relative_to(ROOT)} -> {target}")\nif errors:\n    raise AssertionError("\\n".join(errors[:50]))\nprint("validate_markdown_links: OK")\n')
-    write(ROOT / "scripts" / "check_required_sections.py", 'from pathlib import Path\nfrom course_config import DAYS, WEEKS\nROOT = Path(__file__).resolve().parents[1]\nfor day, week, slug in DAYS:\n    base = ROOT / "weeks" / WEEKS[week] / slug\n    checks = {"01_concepts/README.md": ["## 1. 오늘의 위치", "## 2. 학습 목표", "## 4. 핵심 개념"], "02_examples/README.md": ["## 예제 목표", "## 실행 순서"], "03_practice/README.md": ["## 실습 원칙", "## 문제 1", "## 문제 5"], "04_quiz/README.md": ["## 객관식", "## 단답형", "## 코드 읽기", "## 디버깅"]}\n    for rel, headings in checks.items():\n        text = (base / rel).read_text(encoding="utf-8")\n        for heading in headings:\n            if heading not in text:\n                raise AssertionError(f"missing {heading} in {base / rel}")\nprint("check_required_sections: OK")\n')
-    write(ROOT / "scripts" / "validate_notebooks.py", 'import json\nfrom pathlib import Path\nROOT = Path(__file__).resolve().parents[1]\ncount = 0\nfor path in ROOT.rglob("*.ipynb"):\n    data = json.loads(path.read_text(encoding="utf-8"))\n    if data.get("nbformat") != 4 or not data.get("cells"):\n        raise AssertionError(f"invalid notebook: {path}")\n    joined = json.dumps(data, ensure_ascii=False)\n    for token in ["TODO", "placeholder", "추후 작성", "생략"]:\n        if token in joined:\n            raise AssertionError(f"banned token {token}: {path}")\n    if "practice_student" in path.name and "정답" in joined:\n        raise AssertionError(f"solution leak: {path}")\n    count += 1\nif count != 84:\n    raise AssertionError(f"expected 84 notebooks, found {count}")\nprint("validate_notebooks: OK")\n')
+    write(ROOT / "scripts" / "check_required_sections.py", '''
+from pathlib import Path
+from course_config import DAYS, WEEKS
+
+ROOT = Path(__file__).resolve().parents[1]
+for day, week, slug in DAYS:
+    base = ROOT / "weeks" / WEEKS[week] / slug
+    if day == 1:
+        checks = {
+            "concept.md": ["## 1. 오늘 수업의 목적", "## 3. 값이란 무엇인가", "## 6. 타입은 값의 종류다", "## 10. 수업 진행 방식"],
+            "lesson.py": ["# 1. records는", "# 3. 아래 코드는", "# 8. 읽기 과제"],
+        }
+    else:
+        checks = {
+            "01_concepts/README.md": ["## 1. 오늘의 위치", "## 2. 학습 목표", "## 4. 핵심 개념"],
+            "02_examples/README.md": ["## 예제 목표", "## 실행 순서"],
+            "03_practice/README.md": ["## 실습 원칙", "## 문제 1", "## 문제 5"],
+            "04_quiz/README.md": ["## 객관식", "## 단답형", "## 코드 읽기", "## 디버깅"],
+        }
+    for rel, headings in checks.items():
+        text = (base / rel).read_text(encoding="utf-8")
+        for heading in headings:
+            if heading not in text:
+                raise AssertionError(f"missing {heading} in {base / rel}")
+print("check_required_sections: OK")
+''')
+    write(ROOT / "scripts" / "validate_notebooks.py", 'import json\nfrom pathlib import Path\nROOT = Path(__file__).resolve().parents[1]\ncount = 0\nfor path in ROOT.rglob("*.ipynb"):\n    data = json.loads(path.read_text(encoding="utf-8"))\n    if data.get("nbformat") != 4 or not data.get("cells"):\n        raise AssertionError(f"invalid notebook: {path}")\n    joined = json.dumps(data, ensure_ascii=False)\n    for token in ["TODO", "placeholder", "추후 작성", "생략"]:\n        if token in joined:\n            raise AssertionError(f"banned token {token}: {path}")\n    if "practice_student" in path.name and "정답" in joined:\n        raise AssertionError(f"solution leak: {path}")\n    count += 1\nif count != 81:\n    raise AssertionError(f"expected 81 notebooks, found {count}")\nprint("validate_notebooks: OK")\n')
     write(ROOT / "scripts" / "execute_notebooks.py", 'import json\nfrom pathlib import Path\nROOT = Path(__file__).resolve().parents[1]\nexecuted = 0\nfor path in ROOT.rglob("*.ipynb"):\n    data = json.loads(path.read_text(encoding="utf-8"))\n    env = {"__name__": "__notebook__"}\n    for cell in data["cells"]:\n        if cell["cell_type"] == "code":\n            source = "".join(cell["source"])\n            exec(compile(source, str(path), "exec"), env)\n    executed += 1\nprint(f"execute_notebooks: OK ({executed} notebooks)")\n')
     write(ROOT / "scripts" / "validate_datasets.py", 'import csv\nfrom pathlib import Path\nROOT = Path(__file__).resolve().parents[1]\npatient_rows = list(csv.DictReader((ROOT / "datasets" / "synthetic_patients.csv").open(encoding="utf-8")))\npatient_ids = {row["patient_id"] for row in patient_rows}\nif len(patient_ids) != len(patient_rows):\n    raise AssertionError("duplicate patient_id")\nfor name in ["synthetic_labs.csv", "synthetic_visits.csv", "synthetic_notes.csv"]:\n    rows = list(csv.DictReader((ROOT / "datasets" / name).open(encoding="utf-8")))\n    if not rows:\n        raise AssertionError(f"empty dataset: {name}")\n    for row in rows:\n        if row["patient_id"] not in patient_ids:\n            raise AssertionError(f"orphan patient_id in {name}")\nprint("validate_datasets: OK")\n')
 
 
 def tests() -> None:
-    write(ROOT / "tests" / "test_course_contract.py", 'from pathlib import Path\nROOT = Path(__file__).resolve().parents[1]\n\ndef test_readme_renders_as_markdown():\n    text = (ROOT / "README.md").read_text(encoding="utf-8")\n    assert text.startswith("# 서울대학교")\n    assert "```" in text\n\ndef test_all_days_have_answers():\n    days = list((ROOT / "weeks").glob("week*/day*"))\n    assert len(days) == 28\n    assert all((day / "answers" / "practice_answers.md").exists() for day in days)\n\ndef test_datasets_are_synthetic():\n    text = (ROOT / "datasets" / "README.md").read_text(encoding="utf-8")\n    assert "합성 데이터" in text\n')
+    write(ROOT / "tests" / "test_course_contract.py", '''
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_readme_renders_as_markdown():
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert text.startswith("# 서울대학교")
+    assert "day01_colab_execution_values_and_types/concept.md" in text
+
+
+def test_day1_is_two_file_lesson():
+    day1 = ROOT / "weeks" / "week01_python_foundations" / "day01_colab_execution_values_and_types"
+    assert (day1 / "concept.md").exists()
+    assert (day1 / "lesson.py").exists()
+    assert not (day1 / "01_concepts").exists()
+    assert not (day1 / "answers").exists()
+
+
+def test_remaining_days_keep_answer_materials():
+    days = list((ROOT / "weeks").glob("week*/day*"))
+    assert len(days) == 28
+    for day in days:
+        if day.name.startswith("day01_"):
+            continue
+        assert (day / "answers" / "practice_answers.md").exists()
+
+
+def test_datasets_are_synthetic():
+    text = (ROOT / "datasets" / "README.md").read_text(encoding="utf-8")
+    assert "합성 데이터" in text
+''')
 
 
 def main() -> None:
