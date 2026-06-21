@@ -157,6 +157,8 @@ jobs:
           python scripts/validate_datasets.py
           python scripts/execute_notebooks.py
           python -m pytest
+      - name: Exclude generated workflow from bot commit
+        run: rm -f .github/workflows/content-validation.yml
       - name: Commit generated repository
         run: |
           git config user.name "github-actions[bot]"
