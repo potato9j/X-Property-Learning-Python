@@ -1,23 +1,23 @@
 # 서울대학교 의과대학생 특강 대비 Python, 데이터, PyTorch, LLM 4주 사전교육
 
-    이 저장소는 Python 경험이 거의 없는 의과대학생을 위한 4주 사전교육 교재이다. Colab은 실행 도구로만 사용하고, 핵심은 Python 코드와 데이터 흐름을 읽고 해석하는 능력이다.
+이 저장소는 Python 경험이 거의 없는 의과대학생을 위한 4주 사전교육 교재이다. Colab은 실행 도구로만 사용하고, 핵심은 Python 코드와 데이터 흐름을 읽고 해석하는 능력이다.
 
-    ## 자료 구조
+## 자료 구조
 
-    각 일차 폴더에는 두 파일만 둔다.
+각 일차 폴더에는 두 파일만 둔다.
 
-    ```text
-    concept.md  # 개념 교재
-    lesson.py   # 주석을 따라 읽고 실행하는 Python 코드
-    ```
+```text
+concept.md  # 개념 교재
+lesson.py   # 주석을 따라 읽고 실행하는 Python 코드
+```
 
-    불필요한 다중 md 파일, 학생용/해설용 노트북 분리, 반복되는 퀴즈 폴더는 두지 않는다. 학생이 무엇을 읽고 무엇을 실행할지 바로 알 수 있게 하는 것이 우선이다.
+불필요한 다중 md 파일, 학생용/해설용 노트북 분리, 반복되는 퀴즈 폴더는 두지 않는다. 학생이 무엇을 읽고 무엇을 실행할지 바로 알 수 있게 하는 것이 우선이다.
 
-    ## 학습 경로
+## 학습 경로
 
-    | 주차 | 일차 | 개념 파일 |
-    | --- | --- | --- |
-    | Week 1 | Day 01 | [Colab 실행, 값, 표현식과 타입](weeks/week01_python_foundations/day01_colab_execution_values_and_types/concept.md) |
+| 주차 | 일차 | 개념 파일 |
+| --- | --- | --- |
+| Week 1 | Day 01 | [Colab 실행, 값, 표현식과 타입](weeks/week01_python_foundations/day01_colab_execution_values_and_types/concept.md) |
 | Week 1 | Day 02 | [문자열, 리스트와 순서형 자료](weeks/week01_python_foundations/day02_strings_lists_and_structured_data/concept.md) |
 | Week 1 | Day 03 | [dictionary, tuple, set과 객체 모델](weeks/week01_python_foundations/day03_dict_tuple_set_and_object_model/concept.md) |
 | Week 1 | Day 04 | [조건문, 반복문과 comprehension](weeks/week01_python_foundations/day04_conditions_loops_and_comprehension/concept.md) |
@@ -46,27 +46,27 @@
 | Week 4 | Day 27 | [decoding, prompting, RAG와 fine-tuning](weeks/week04_transformer_and_llm/day27_decoding_prompting_rag_finetuning/concept.md) |
 | Week 4 | Day 28 | [통합 LLM 프로젝트, 윤리와 최종 숙달](weeks/week04_transformer_and_llm/day28_integrated_llm_project_ethics_review/concept.md) |
 
-    ## Colab 실행
+## Colab 실행
 
-    각 일차 폴더의 `lesson.py`를 Colab에 올린 뒤 다음 중 하나로 실행한다.
+각 일차 폴더의 `lesson.py`를 Colab에 올린 뒤 다음 중 하나로 실행한다.
 
-    ```python
-    %run lesson.py
-    ```
+```python
+%run lesson.py
+```
 
-    또는
+또는
 
-    ```python
-    !python lesson.py
-    ```
+```python
+!python lesson.py
+```
 
-    ## 검증
+## 검증
 
-    ```bash
-    python scripts/validate_structure.py
-    python scripts/validate_markdown_links.py
-    python scripts/check_required_sections.py
-    python scripts/execute_lessons.py
-    python scripts/validate_datasets.py
-    python -m pytest
-    ```
+```bash
+python scripts/validate_structure.py
+python scripts/validate_markdown_links.py
+python scripts/check_required_sections.py
+python scripts/execute_lessons.py
+python scripts/validate_datasets.py
+python -m pytest
+```
