@@ -4,16 +4,17 @@
 
 ## 과정 운영 원칙
 
-- 학생용 노트북과 해설 노트북을 분리해 수업 전 자기 점검과 수업 후 복습이 모두 가능하게 합니다.
-- 매일 개념 설명, 실행 예제, 실습 문제, 퀴즈, 해설을 같은 구조로 제공합니다.
-- 코드는 Colab 기준으로 실행되며, 로컬 검증 스크립트는 문서 구조와 노트북 실행 가능성을 확인합니다.
+- Colab은 실행 도구로만 사용하고, 학습의 중심은 Python 코드 읽기와 해석에 둡니다.
+- Day 1은 `concept.md`와 `lesson.py` 두 파일만 사용해 학생이 읽을 파일과 실행할 파일을 명확히 구분합니다.
+- 이후 일차도 개념 설명, 실행 예제, 실습 문제, 퀴즈, 해설을 학생이 따라갈 수 있는 순서로 제공합니다.
+- 로컬 검증 스크립트는 문서 구조, 링크, 노트북 또는 Python 파일의 실행 가능성을 확인합니다.
 - 생성형 AI는 학습 보조 도구로만 다루며, 개인정보 입력과 검증 없는 임상 판단을 금지합니다.
 
 ## 28일 학습 경로
 
 | 주차 | 일차 | 주제 |
 | --- | --- | --- |
-| Week 1 | Day 01 | [Colab 실행, 값, 표현식과 타입](weeks/week01_python_foundations/day01_colab_execution_values_and_types/01_concepts/README.md) |
+| Week 1 | Day 01 | [Colab 실행, 값, 표현식과 타입](weeks/week01_python_foundations/day01_colab_execution_values_and_types/concept.md) |
 | Week 1 | Day 02 | [문자열, 리스트와 순서형 자료](weeks/week01_python_foundations/day02_strings_lists_and_structured_data/01_concepts/README.md) |
 | Week 1 | Day 03 | [dictionary, tuple, set과 객체 모델](weeks/week01_python_foundations/day03_dict_tuple_set_and_object_model/01_concepts/README.md) |
 | Week 1 | Day 04 | [조건문, 반복문과 comprehension](weeks/week01_python_foundations/day04_conditions_loops_and_comprehension/01_concepts/README.md) |

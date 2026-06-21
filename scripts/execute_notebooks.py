@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-
 ROOT = Path(__file__).resolve().parents[1]
 executed = 0
 for path in ROOT.rglob("*.ipynb"):
